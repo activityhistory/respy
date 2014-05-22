@@ -1,6 +1,6 @@
 //Create and hide main window
 var mainWindow = Ti.UI.currentWindow;
-mainWindow.setTitle('Reflect');
+mainWindow.setTitle('Respy');
 mainWindow.setWidth(1020);
 mainWindow.setHeight(680);
 
@@ -49,8 +49,8 @@ function load_images(imgs){
 		.attr("height", imgH)
 		.attr("id", "mainImg");
 	
-	var label = d3.select("#image").appen("p")
-		.text(toString)
+// 	var label = d3.select("#image").append("p")
+// 		.text(toString)
 	
 	var sliderDiv = d3.select("#image").append("div")
             .attr("id", "slider")

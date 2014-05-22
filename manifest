@@ -1,5 +1,5 @@
-#appname:Reflect
-#appid:reflect
+#appname:Respy
+#appid:respy
 #publisher:adamrule
 #image:eye-32.png
 #url:adamrule.com
@@ -19,4 +19,3 @@ process:1.3.1-beta
 python:1.3.1-beta
 ui:1.3.1-beta
 worker:1.3.1-beta
-php:1.3.1-beta
