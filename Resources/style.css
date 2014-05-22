@@ -1,0 +1,11 @@
+body{
+	background-color: #fff;
+	font-family: helvetica, sans-serif;
+	color: #000;
+	margin: 10;
+	background-color: #ccc;
+}
+
+#image{
+	width: 1000px;
+}

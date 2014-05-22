@@ -1,0 +1,47 @@
+<html>
+
+<head>
+	<style>
+		body{
+			background: white;
+			font-family: helvetica, sans-seriff;
+		}
+	</style>
+	<script>
+		//Puts typed response into a database
+		//TODO: get ID to increment every time
+		function sendResponse(){
+			response = document.getElementById('doing').value;
+			var db = Ti.Database.open('experience');
+			db.execute("CREATE TABLE IF NOT EXISTS Experiences(id INTEGER, time TEXT, response TEXT)");
+			db.execute("INSERT INTO Experiences VALUES(1, CURRENT_TIMESTAMP,'"+ response + "')"); 
+			db.close();
+			
+			//Cleans up the window to reuse at next interval
+			response.value = '';
+			popup = Ti.UI.currentWindow;
+			popup.hide();
+			
+		}
+		
+		//Intercepts any close events and hides window instead
+		var appWindow = Ti.UI.getCurrentWindow();
+    	appWindow.addEventListener(Ti.CLOSE, function(event) {
+			appWindow.hide();
+			event.preventDefault();
+			return false;
+		});
+	</script>
+</head>
+
+
+<body>
+	<p>What are you doing now?</p>
+	<form>
+		<input type="text" name="doing" id="doing" onkeydown="if(event.keyCode == 13){ sendResponse() }">
+		<button onClick="sendResponse()">OK</button>
+	</form>
+</body>
+
+
+</html>
