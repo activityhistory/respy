@@ -2,18 +2,11 @@
 var mainWindow = Ti.UI.currentWindow;
 mainWindow.setTitle('Respy');
 mainWindow.setWidth(1020);
-mainWindow.setHeight(680);
+mainWindow.setHeight(800);
 
-// //Create child window for experience sampling
-// var popup = mainWindow.createWindow('app://popup.html');
-// popup.setHeight(100);
-// popup.setWidth(250);
-// popup.setTitle('')
-// popup.open();
-
-function showPopup(){
-	popup.show()
-}
+var currentScreenshot = 0;
+var interval = null;
+var playing = false;
 
 function showData(){
 
@@ -44,13 +37,14 @@ function load_images(imgs){
         .attr("height", imgH);
             
     var svgimg = svg.append("svg:image")
-		.attr("xlink:href", "file://" + window.selfspy_directory+ "/screenshots/" + imgs[0])
+		.attr("xlink:href", "file://" + window.selfspy_directory+ "/screenshots/" + imgs[currentScreenshot])
 		.attr("width", imgW)
 		.attr("height", imgH)
 		.attr("id", "mainImg");
 	
-// 	var label = d3.select("#image").append("p")
-// 		.text(toString)
+ 	var label = d3.select("#image").append("p")
+ 		.attr("id", "label")
+ 		.text(parse_date(imgs[0]));
 	
 	var sliderDiv = d3.select("#image").append("div")
             .attr("id", "slider")
@@ -60,17 +54,51 @@ function load_images(imgs){
 	$(function() {$( "#slider" ).slider({ max: imgs.length-1 });});
 	
 	$("#slider").slider({ slide: function(event, ui){
-        
 		//Change image
 		var i = $("#slider").slider("value");
 		$("#mainImg").attr("href", "file://" + window.selfspy_directory+ "/screenshots/" + imgs[i]);
-		
+		label.text(parse_date(imgs[i]));
+		currentScreenshot = i;
 	}}); 
+	
+	var playPause = d3.select("#controls").append("button")
+		.attr("id", "playButton")
+		.text("Play")
+		.on("click", togglePlay);
 
 }
 
-function parse_date(img_date){
+function togglePlay(){
+
+	if (playing){
+		d3.select("#playButton").text("Play");
+		playing = false;
+		clearInterval(interval);
+	}
 	
+	else{
+		d3.select("#playButton").text("Pause");
+		playing = true;
+		interval = setInterval(function(){play()}, 500);
+	}	
+}
+
+function play(){
+	currentScreenshot += 1;
+	$("#slider").slider("value", currentScreenshot);
+	$("#mainImg").attr("href", "file://" + window.selfspy_directory+ "/screenshots/" + imgs[currentScreenshot]);
+	d3.select("#label").text(parse_date(imgs[currentScreenshot]));
+}
+
+function parse_date(img_date){
+	year = "20"+img_date.slice(0,2);
+	month = img_date.slice(2,4);
+	day = img_date.slice(4,6);
+	hour = img_date.slice(7,9);
+	minute = img_date.slice(9,11);
+	second = img_date.slice(11,13);
+	dt = month + "/" + day + "/" + year + " - " + hour + ":" + minute + ":" + second;
+	return dt;
 }
 
 
